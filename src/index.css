@@ -2,69 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* JobTracker Pro - Professional Job Application Tracker Design System
-   Colors: Deep slate primary, success greens, amber accents, clean grays
-   All colors in HSL format
-*/
-
 @layer base {
   :root {
-    /* Core backgrounds */
     --background: 210 20% 98%;
     --foreground: 222 47% 11%;
 
-    /* Cards and surfaces */
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
-    /* Popovers and modals */
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Primary - Deep slate blue */
     --primary: 222 47% 11%;
     --primary-foreground: 210 40% 98%;
 
-    /* Secondary - Soft blue-gray */
     --secondary: 215 25% 93%;
     --secondary-foreground: 222 47% 11%;
 
-    /* Muted surfaces */
     --muted: 215 20% 95%;
     --muted-foreground: 215 16% 47%;
 
-    /* Accent - Vibrant blue */
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
-    /* Destructive - Red for rejections */
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Success - Green for offers */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Amber for interviews */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info - Blue for OA/applied */
     --info: 217 91% 60%;
     --info-foreground: 0 0% 100%;
 
-    /* Saved - Gray for saved jobs */
     --saved: 215 16% 47%;
     --saved-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     --ring: 222 47% 11%;
 
     --radius: 0.625rem;
 
-    /* Sidebar */
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 217 91% 60%;
@@ -74,13 +55,11 @@
     --sidebar-border: 222 47% 18%;
     --sidebar-ring: 217 91% 60%;
 
-    /* Custom gradients */
     --gradient-primary: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(217 91% 30%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 45%) 100%);
     --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 28%) 100%);
     --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(25 95% 53%) 100%);
     
-    /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(222 47% 11% / 0.1), 0 2px 4px -2px hsl(222 47% 11% / 0.1);
     --shadow-lg: 0 10px 15px -3px hsl(222 47% 11% / 0.1), 0 4px 6px -4px hsl(222 47% 11% / 0.1);
@@ -155,7 +134,6 @@
 }
 
 @layer components {
-  /* Status badge variants */
   .status-badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
   }
@@ -184,12 +162,10 @@
     @apply bg-destructive/10 text-destructive;
   }
 
-  /* Card hover effects */
   .card-hover {
     @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
   }
 
-  /* Dashboard stat cards */
   .stat-card {
     @apply relative overflow-hidden rounded-xl border bg-card p-6 shadow-sm transition-all duration-200;
   }
@@ -211,25 +187,21 @@
     background: var(--gradient-warning);
   }
 
-  /* Smooth page transitions */
   .page-transition {
     @apply animate-in fade-in-0 slide-in-from-bottom-4 duration-500;
   }
 
-  /* Glass effect for overlays */
   .glass {
     @apply bg-background/80 backdrop-blur-lg;
   }
 }
 
 @layer utilities {
-  /* Text gradient utility */
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);
   }
 
-  /* Score ring for resume matching */
   .score-ring {
     @apply relative inline-flex items-center justify-center;
   }

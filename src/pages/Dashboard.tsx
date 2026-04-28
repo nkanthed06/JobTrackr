@@ -79,7 +79,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {summary.upcoming_interviews.map((interview: any) => (
+                {summary.upcoming_interviews.map((interview) => (
                   <div key={interview.id} className="flex items-center justify-between border-b pb-4 last:border-0">
                     <div>
                       <p className="font-medium">{interview.company}</p>

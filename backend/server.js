@@ -16,7 +16,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 app.use(cors());
 app.use(express.json());
 
-// Auth middleware
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) {
@@ -31,7 +30,6 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// Auth routes
 app.post('/api/auth/signup', async (req, res) => {
   try {
     const { email, password, fullName } = req.body;
@@ -83,7 +81,6 @@ app.get('/api/auth/user', authenticate, (req, res) => {
   }
 });
 
-// Applications routes
 app.get('/api/applications', authenticate, (req, res) => {
   try {
     const applications = db.prepare('SELECT * FROM applications WHERE user_id = ? ORDER BY created_at DESC').all(req.userId);
@@ -142,7 +139,6 @@ app.delete('/api/applications/:id', authenticate, (req, res) => {
   }
 });
 
-// Dashboard
 app.get('/api/dashboard/summary', authenticate, (req, res) => {
   try {
     const statusCounts = db.prepare('SELECT status, COUNT(*) as count FROM applications WHERE user_id = ? GROUP BY status').all(req.userId);
@@ -163,12 +159,10 @@ app.get('/api/dashboard/summary', authenticate, (req, res) => {
   }
 });
 
-// Match endpoint
 app.post('/api/match', authenticate, (req, res) => {
   try {
     const { resume_text, job_text } = req.body;
     
-    // Simple TF-IDF
     const getWords = (text) => text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length > 2);
     const getFreq = (words) => {
       const freq = {};
@@ -181,7 +175,6 @@ app.post('/api/match', authenticate, (req, res) => {
     const resumeFreq = getFreq(resumeWords);
     const jobFreq = getFreq(jobWords);
     
-    // Cosine similarity
     const allWords = new Set([...Object.keys(resumeFreq), ...Object.keys(jobFreq)]);
     let dotProduct = 0, mag1 = 0, mag2 = 0;
     allWords.forEach(word => {
@@ -194,13 +187,11 @@ app.post('/api/match', authenticate, (req, res) => {
     const similarity = (mag1 === 0 || mag2 === 0) ? 0 : dotProduct / (Math.sqrt(mag1) * Math.sqrt(mag2));
     const score = Math.round(similarity * 100);
     
-    // Keywords
     const resumeKeywords = Object.entries(resumeFreq).sort((a, b) => b[1] - a[1]).slice(0, 20).map(([word]) => word);
     const jobKeywords = Object.entries(jobFreq).sort((a, b) => b[1] - a[1]).slice(0, 20).map(([word]) => word);
     const overlapKeywords = jobKeywords.filter(k => resumeKeywords.includes(k)).slice(0, 8);
     const missingKeywords = jobKeywords.filter(k => !resumeKeywords.includes(k)).slice(0, 8);
     
-    // Tips
     const tips = [];
     if (score < 40) tips.push('Consider restructuring your resume to better match the job requirements');
     else if (score < 60) tips.push('Good foundation! Add more keywords from the job description');

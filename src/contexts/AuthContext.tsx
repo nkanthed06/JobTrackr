@@ -1,11 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { authAPI } from '@/lib/api-client';
-
-interface User {
-  id: string;
-  email: string;
-  full_name?: string;
-}
+import axios from 'axios';
+import { authAPI, type AuthUser } from '@/lib/api-client';
 
 interface AuthContextType {
   user: User | null;
@@ -18,6 +13,15 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+type User = AuthUser;
+
+const getAuthErrorMessage = (error: unknown, fallback: string) => {
+  if (axios.isAxiosError<{ error?: string }>(error)) {
+    return error.response?.data?.error || fallback;
+  }
+  return fallback;
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<{ token: string } | null>(null);
@@ -29,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (token && userData) {
       try {
-        const parsedUser = JSON.parse(userData);
+        const parsedUser = JSON.parse(userData) as User;
         setUser(parsedUser);
         setSession({ token });
         
@@ -57,8 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(response.user);
       setSession({ token: response.token });
       return { error: null };
-    } catch (error: any) {
-      return { error: new Error(error.response?.data?.error || 'Failed to sign up') };
+    } catch (error: unknown) {
+      return { error: new Error(getAuthErrorMessage(error, 'Failed to sign up')) };
     }
   };
 
@@ -70,8 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(response.user);
       setSession({ token: response.token });
       return { error: null };
-    } catch (error: any) {
-      return { error: new Error(error.response?.data?.error || 'Failed to sign in') };
+    } catch (error: unknown) {
+      return { error: new Error(getAuthErrorMessage(error, 'Failed to sign in')) };
     }
   };
 

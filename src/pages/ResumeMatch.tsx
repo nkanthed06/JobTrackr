@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { matchAPI } from '@/lib/api-client';
-import { useAuth } from '@/contexts/AuthContext';
+import { matchAPI, type MatchResult } from '@/lib/api-client';
 import AppLayout from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,11 +10,10 @@ import { useToast } from '@/hooks/use-toast';
 import { Sparkles } from 'lucide-react';
 
 const ResumeMatch = () => {
-  const { user } = useAuth();
   const { toast } = useToast();
   const [resumeText, setResumeText] = useState('');
   const [jobText, setJobText] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<MatchResult | null>(null);
 
   const matchMutation = useMutation({
     mutationFn: async () => {

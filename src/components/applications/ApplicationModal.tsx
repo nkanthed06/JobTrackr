@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { applicationsAPI } from '@/lib/api-client';
+import { applicationsAPI, type Application, type ApplicationInput } from '@/lib/api-client';
 import {
   Dialog,
   DialogContent,
@@ -23,13 +23,13 @@ import { useToast } from '@/hooks/use-toast';
 interface ApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  application?: any;
+  application?: Application | null;
 }
 
 const ApplicationModal = ({ isOpen, onClose, application }: ApplicationModalProps) => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { register, handleSubmit, reset, setValue, watch } = useForm();
+  const { register, handleSubmit, reset, setValue, watch } = useForm<ApplicationInput>();
 
   useEffect(() => {
     if (application) {
@@ -49,7 +49,7 @@ const ApplicationModal = ({ isOpen, onClose, application }: ApplicationModalProp
   }, [application, reset]);
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => applicationsAPI.create(data),
+    mutationFn: (data: ApplicationInput) => applicationsAPI.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
@@ -70,7 +70,7 @@ const ApplicationModal = ({ isOpen, onClose, application }: ApplicationModalProp
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: any) => applicationsAPI.update(application.id, data),
+    mutationFn: (data: ApplicationInput) => applicationsAPI.update(application?.id || '', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
@@ -90,7 +90,7 @@ const ApplicationModal = ({ isOpen, onClose, application }: ApplicationModalProp
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ApplicationInput) => {
     if (application) {
       updateMutation.mutate(data);
     } else {

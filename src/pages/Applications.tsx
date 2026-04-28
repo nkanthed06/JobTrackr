@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { applicationsAPI } from '@/lib/api-client';
-import { useAuth } from '@/contexts/AuthContext';
+import { applicationsAPI, type Application } from '@/lib/api-client';
 import AppLayout from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,12 +11,11 @@ import DeleteConfirmDialog from '@/components/applications/DeleteConfirmDialog';
 import { useToast } from '@/hooks/use-toast';
 
 const Applications = () => {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingApp, setEditingApp] = useState<any>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingApp, setEditingApp] = useState<Application | null>(null);
+  const [deletingApp, setDeletingApp] = useState<Application | null>(null);
 
   const { data: applications, isLoading } = useQuery({
     queryKey: ['applications'],
@@ -34,7 +32,7 @@ const Applications = () => {
         title: 'Success',
         description: 'Application deleted successfully',
       });
-      setDeletingId(null);
+      setDeletingApp(null);
     },
     onError: () => {
       toast({
@@ -79,7 +77,7 @@ const Applications = () => {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {applications?.map((app: any) => (
+          {applications?.map((app) => (
             <Card key={app.id}>
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -122,7 +120,7 @@ const Applications = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setDeletingId(app.id)}
+                    onClick={() => setDeletingApp(app)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -155,9 +153,10 @@ const Applications = () => {
       />
 
       <DeleteConfirmDialog
-        isOpen={!!deletingId}
-        onClose={() => setDeletingId(null)}
-        onConfirm={() => deletingId && deleteMutation.mutate(deletingId)}
+        open={!!deletingApp}
+        onClose={() => setDeletingApp(null)}
+        onConfirm={() => deletingApp && deleteMutation.mutate(deletingApp.id)}
+        companyName={deletingApp?.company || 'this company'}
         isLoading={deleteMutation.isPending}
       />
     </AppLayout>

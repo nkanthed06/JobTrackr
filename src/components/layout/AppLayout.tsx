@@ -34,10 +34,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Desktop Sidebar */}
       <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r border-sidebar-border bg-sidebar lg:block">
         <div className="flex h-full flex-col">
-          {/* Logo */}
           <div className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary">
               <Briefcase className="h-4 w-4 text-sidebar-primary-foreground" />
@@ -47,7 +45,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </span>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 space-y-1 px-3 py-4">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
@@ -69,7 +66,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
             })}
           </nav>
 
-          {/* User section */}
           <div className="border-t border-sidebar-border p-4">
             <div className="mb-3 truncate text-sm text-sidebar-foreground/70">
               {user?.email}
@@ -86,7 +82,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </div>
       </aside>
 
-      {/* Mobile Header */}
       <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
@@ -103,7 +98,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </Button>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div 
@@ -149,7 +143,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </div>
       )}
 
-      {/* Main Content */}
       <main className="min-h-screen pt-16 lg:ml-64 lg:pt-0">
         <div className="container max-w-6xl p-6">
           {children}
